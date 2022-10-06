@@ -13,7 +13,8 @@ module.exports = {
     builder: '@storybook/builder-vite'
   },
   features: {
-    storyStoreV7: true
+    storyStoreV7: true,
+    interactionsDebugger: true
   },
   async viteFinal(config, { configType }) {
     const { config: userConfig } = await loadConfigFromFile(
