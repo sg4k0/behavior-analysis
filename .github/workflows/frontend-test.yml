@@ -1,0 +1,19 @@
+name: FrontEnd Testing
+on:
+  pull_request:
+jobs:
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: checkout pushed commit
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    - name: run test on docker-compose
+      run: |
+        docker-compose build
+        docker-compose run --rm react yarn install
+        docker-compose run --rm react lint
+      working-directory: ./
