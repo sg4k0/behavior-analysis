@@ -1,8 +1,9 @@
 ARG NODE_VER
 FROM node:${NODE_VER}
 
-USER node
 WORKDIR /home/node/app
-RUN mkdir node_modules
+RUN mkdir /home/node/app/node_modules
+RUN chown -R node:node /home/node/app
+USER node
 
 CMD ["/bin/bash", "-c", "yarn install && yarn dev"]
