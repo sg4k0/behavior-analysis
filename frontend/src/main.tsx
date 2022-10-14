@@ -1,10 +1,24 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
-import './index.css'
+import { BrowserRouter as Router, useRoutes } from 'react-router-dom'
+import routes from '~react-pages'
+import CssBaseline from '@mui/material/CssBaseline'
+
+const App: React.FunctionComponent = () => {
+  return (
+    <>
+      <CssBaseline />
+      <React.Suspense fallback={<p>Loading...</p>}>
+        {useRoutes(routes)}
+      </React.Suspense>
+    </>
+  )
+}
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </React.StrictMode>
 )
