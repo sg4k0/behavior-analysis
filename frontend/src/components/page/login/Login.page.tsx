@@ -1,10 +1,10 @@
 import Layout from '@/components/layout/Layout'
-import { Login } from './Login' 
+import { Login } from './Login'
 
 export const LoginPage: React.FunctionComponent = () => {
   return (
     <Layout>
-      <Login/>
+      <Login />
     </Layout>
   )
 }
