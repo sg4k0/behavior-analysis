@@ -2,6 +2,15 @@
 
 GoogleMapのタイムライン分析
 
+## 事前準備
+
+### `.env`ファイル作成
+
+```
+VITE_MYWEBSITE_URL="URL"
+VITE_MYWEBSITE_NAME="名前"
+```
+
 ## 実行方法
 
 1. docker-compose build
@@ -36,3 +45,9 @@ yarn storybook
 ```
 
 `http://localhost:6006`へアクセス
+
+## vitest実行
+
+```sh
+yarn test
+```

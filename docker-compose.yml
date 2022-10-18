@@ -7,6 +7,9 @@ services:
       context: .
       dockerfile: Dockerfile
     tty: true
+    environment:
+      - VITE_MYWEBSITE_URL=${VITE_MYWEBSITE_URL}
+      - VITE_MYWEBSITE_NAME=${VITE_MYWEBSITE_NAME}
     volumes:
       - ./frontend:/home/node/app
       - node_modules:/home/node/app/node_modules
