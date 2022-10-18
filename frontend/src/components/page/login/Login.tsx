@@ -1,11 +1,9 @@
-import React from 'react'
+import { React, useState } from 'react'
 import Avatar from '@mui/material/Avatar'
+import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
 import Link from '@mui/material/Link'
-import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
@@ -20,8 +18,12 @@ function Copyright(props: any): React.FunctionComponent {
       {...props}
     >
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link
+        color="inherit"
+        href={import.meta.env.VITE_MYWEBSITE_URL}
+        target="website"
+      >
+        {import.meta.env.VITE_MYWEBSITE_NAME}
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -30,17 +32,27 @@ function Copyright(props: any): React.FunctionComponent {
 }
 
 export const Login: React.FunctionComponent = () => {
+  const [message, setmessage] = useState('')
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    console.log({
-      email: data.get('email'),
-      password: data.get('password')
-    })
+    // const data = new FormData(event.currentTarget)
+    // const email = data.get('email')
+    // const password = data.get('password')
+    setmessage('Authorized')
   }
 
   return (
     <Container component="main" maxWidth="xs">
+      {message === 'Authorized' && (
+        <Alert
+          id="authorized-alert"
+          variant="outlined"
+          severity="success"
+          sx={{ mt: 1 }}
+        >
+          認証成功
+        </Alert>
+      )}
       <Box
         sx={{
           marginTop: 8,
@@ -61,7 +73,7 @@ export const Login: React.FunctionComponent = () => {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="メールアドレス"
             name="email"
             autoComplete="email"
             autoFocus
@@ -71,7 +83,7 @@ export const Login: React.FunctionComponent = () => {
             required
             fullWidth
             name="password"
-            label="Password"
+            label="パスワード"
             type="password"
             id="password"
             autoComplete="current-password"
@@ -82,7 +94,7 @@ export const Login: React.FunctionComponent = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            ログイン
           </Button>
         </Box>
       </Box>
