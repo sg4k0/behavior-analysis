@@ -2,8 +2,8 @@ name: FrontEnd Testing
 on:
   pull_request:
 jobs:
-  eslint:
-    name: ESLint
+  ci:
+    name: CI
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
