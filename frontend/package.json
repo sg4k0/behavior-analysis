@@ -12,7 +12,7 @@
     "format": "prettier --write \"**/*.+(js|json|yml|ts|tsx)\"",
     "storybook": "start-storybook -p 6006 --host 0.0.0.0",
     "build-storybook": "build-storybook",
-    "test": "vitest"
+    "test": "vitest run"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
