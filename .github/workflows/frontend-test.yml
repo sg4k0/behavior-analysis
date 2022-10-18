@@ -16,4 +16,5 @@ jobs:
         docker-compose build
         docker-compose run --rm react yarn install
         docker-compose run --rm react yarn lint
+        docker-compose run --rm react yarn test
       working-directory: ./
