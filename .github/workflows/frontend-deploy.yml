@@ -13,6 +13,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+      - name: change owner
+        run: sudo chown -R 1000:1000 ./ 
       - name: Build
         env:
           MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
