@@ -35,3 +35,4 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_TOKEN }}'
           channelId: live
           projectId: '${{ secrets.FIREBASE_PROJECTID }}'
+          entryPoint: ./frontend
