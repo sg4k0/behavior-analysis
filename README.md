@@ -7,8 +7,14 @@ GoogleMapのタイムライン分析
 ### `.env`ファイル作成
 
 ```
-VITE_MYWEBSITE_URL="URL"
-VITE_MYWEBSITE_NAME="名前"
+MYWEBSITE_URL="URL"
+MYWEBSITE_NAME="名前"
+API_KEY="apiKeyの値"
+AUTH_DOMAIN="authDomainの値"
+PROJECT_ID="projectIdの値"
+STORAGE_BUCKET="storageBucketの値"
+MESSAGING_SENDER_ID="messagingSenderIdの値"
+APP_ID="appIdの値"
 ```
 
 ## 実行方法
