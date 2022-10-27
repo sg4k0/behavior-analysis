@@ -1,38 +1,18 @@
-import { React, useState, useEffect } from 'react'
+import { React, useContext, useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '@/firebase'
-import Avatar from '@mui/material/Avatar'
-import Alert from '@mui/material/Alert'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Link from '@mui/material/Link'
-import Box from '@mui/material/Box'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
-
-function Copyright(props: any): React.FunctionComponent {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {'Copyright © '}
-      <Link
-        color="inherit"
-        href={import.meta.env.VITE_MYWEBSITE_URL}
-        target="website"
-      >
-        {import.meta.env.VITE_MYWEBSITE_NAME}
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  )
-}
+import { AuthStateContext } from '@/components/functional/AuthState'
+import {
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography
+} from '@mui/material'
+import { LockOutlined } from '@mui/icons-material'
 
 export const Login: React.FunctionComponent = () => {
   const [email, setEmail] = useState<string>('')
@@ -58,19 +38,12 @@ export const Login: React.FunctionComponent = () => {
     }
   }
 
-  const [user, setUser] = useState()
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser.emailVerified) setUser(currentUser)
-    })
-  })
+  const user = useContext(AuthStateContext)
 
   return (
     <>
-      {user !== null ? (
-        // <Navigate to={'/sample'} />
-        <div>test</div>
+      {user != null ? (
+        <Navigate to={'/sample'} />
       ) : (
         <Container component="main" maxWidth="xs">
           {isError && (
@@ -92,7 +65,7 @@ export const Login: React.FunctionComponent = () => {
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
+              <LockOutlined />
             </Avatar>
             <Typography component="h1" variant="h5">
               ログイン
@@ -135,7 +108,6 @@ export const Login: React.FunctionComponent = () => {
               </Button>
             </Box>
           </Box>
-          <Copyright sx={{ mt: 8, mb: 4 }} />
         </Container>
       )}
     </>
