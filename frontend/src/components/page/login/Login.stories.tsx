@@ -1,7 +1,5 @@
-import React from 'react'
 import { ComponentStoryObj, ComponentMeta } from '@storybook/react'
 import { userEvent, within } from '@storybook/testing-library'
-
 import { Login } from './Login'
 
 export default {
@@ -9,10 +7,26 @@ export default {
   component: Login
 } as ComponentMeta<typeof Login>
 
-const Template: ComponentStoryObj<typeof Login> = () => <Login />
-export const Empty = Template.bind({})
-export const Auth = Template.bind({})
-Auth.play = async ({ canvasElement }) => {
-  const canvas = within(canvasElement)
-  await userEvent.click(canvas.getByRole('button'))
+export const Empty: ComponentStoryObj<typeof Login> = {}
+
+export const AuthFailed: ComponentStoryObj<typeof Login> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const emailField = canvas.getByRole('textbox', { name: 'メールアドレス' })
+    const passwordField = canvas.getByLabelText(/パスワード/i)
+    await userEvent.type(emailField, 'test1@example.com')
+    await userEvent.type(passwordField, 'password')
+    await userEvent.click(canvas.getByRole('button'))
+  }
+}
+
+export const AuthSuccess: ComponentStoryObj<typeof Login> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const emailField = canvas.getByRole('textbox', { name: 'メールアドレス' })
+    const passwordField = canvas.getByLabelText(/パスワード/i)
+    await userEvent.type(emailField, 'test@example.com')
+    await userEvent.type(passwordField, 'password')
+    await userEvent.click(canvas.getByRole('button'))
+  }
 }
