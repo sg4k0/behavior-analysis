@@ -14,9 +14,9 @@ jobs:
     - uses: docker/setup-buildx-action@v2
     - uses: docker/build-push-action@v4
       with:
-        build-args:
-          NODE_VER: 18.16.0-slim
-          FIREBASE_VER: 12.3.0
+        build-args: |
+          NODE_VER=18.16.0-slim
+          FIREBASE_VER=12.3.0
         context: ./frontend
         cache-from: type=gha
         cache-to: type=gha,mode=max
