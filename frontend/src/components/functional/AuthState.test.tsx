@@ -28,7 +28,6 @@ describe('AuthProvider', () => {
   const TestingComponent: React.FunctionComponent = () => {
     const login: Promise<void> = async () => {
       try {
-        console.log('login start')
         await signInWithEmailAndPassword(auth, 'test@example.com', 'password')
       } catch (error) {
         console.log(error)
