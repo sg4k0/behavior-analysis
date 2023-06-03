@@ -27,8 +27,7 @@ jobs:
         docker compose build
         docker compose run --rm react yarn install
         docker compose run --rm react yarn lint
-        docker compose up -d
-        docker compose ps
-        docker compose logs -f emulator
-        docker compose exec react yarn test
+        docker compose up -d emulator
+        sleep 15
+        docker compose run --rm react yarn test
       working-directory: ./
