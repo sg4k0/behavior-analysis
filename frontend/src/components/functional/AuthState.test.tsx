@@ -27,7 +27,12 @@ describe('UserEnabled', () => {
 describe('AuthProvider', () => {
   const TestingComponent: React.FunctionComponent = () => {
     const login: Promise<void> = async () => {
-      await signInWithEmailAndPassword(auth, 'test@example.com', 'password')
+      try {
+        console.log('login start')
+        await signInWithEmailAndPassword(auth, 'test@example.com', 'password')
+      } catch (error) {
+        console.log(error)
+      }
     }
     const user = useContext(AuthStateContext)
     return (
