@@ -3,8 +3,8 @@ services:
   react:
     build:
       args:
-        - NODE_VER=16.17.1-slim
-        - FIREBASE_VER=11.15.0
+        - NODE_VER=18.16.0-slim
+        - FIREBASE_VER=12.3.0
       context: ./frontend
     tty: true
     environment:
@@ -16,7 +16,7 @@ services:
       - VITE_STORAGE_BUCKET=${STORAGE_BUCKET}
       - VITE_MESSAGING_SENDER_ID=${MESSAGING_SENDER_ID}
       - VITE_APP_ID=${APP_ID}
-      - FIREBASE_AUTH_EMULATOR_HOST=emulator:9099
+      - FIREBASE_AUTH_EMULATOR_HOST="emulator:9099"
     volumes:
       - ./frontend:/home/node/app
       - node_modules:/home/node/app/node_modules
@@ -28,8 +28,8 @@ services:
     build:
       args:
         - OPEN_JDK_VER=20-slim
-        - NODE_VER=16.17.1-slim
-        - FIREBASE_VER=11.15.0
+        - NODE_VER=18.16.0-slim
+        - FIREBASE_VER=12.3.0
       context: ./firebase_emulator
     tty: true
     environment:

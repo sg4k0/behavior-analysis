@@ -4,24 +4,26 @@ import { auth } from '@/firebase'
 
 export const AuthStateContext = createContext(null)
 
+export const UserEnabled: boolean = (user) => {
+  if (user == null) return false
+
+  return user.emailVerified
+}
+
 export const AuthProvider: React.FunctionComponent = (props: any) => {
-  const userEnabled: boolean = (user) => {
-    if (user == null) return false
-
-    return user.emailVerified
-  }
-
   const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
-      if (userEnabled(currentUser) === true) setUser(currentUser)
+      if (UserEnabled(currentUser) === true) setUser(currentUser)
+      setLoading(false)
     })
   })
 
   return (
     <AuthStateContext.Provider value={user}>
-      {props.children}
+      {!loading && props.children}
     </AuthStateContext.Provider>
   )
 }
