@@ -15,7 +15,7 @@ jobs:
       run: sudo chown -R 1000:1000 ./ 
     - name: run test on docker-compose
       env:
-        FIREBASE_AUTH_EMULATOR_HOST=emulator:9099
+        FIREBASE_AUTH_EMULATOR_HOST: "emulator:9099"
       run: |
         docker compose build
         docker compose run --rm react yarn install
