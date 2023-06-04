@@ -1,18 +1,38 @@
 name: FrontEnd Testing
 on:
   pull_request:
+env:
+  DOCKER_CACHE_PATH: /tmp/docker-cache
 jobs:
   ci:
     name: CI
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+    - name: set repository name
+      run: echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#${GITHUB_REPOSITORY_OWNER}/}" >> $GITHUB_ENV
     - name: checkout pushed commit
       uses: actions/checkout@v2
       with:
         ref: ${{ github.event.pull_request.head.sha }}
+    - name: Cache a Docker Image
+      id: cache-docker-image
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.DOCKER_CACHE_PATH }}
+        key: ${{ env.REPOSITORY_NAME }}-image
+    - name: Cache Load
+      if: steps.cache-docker-image.outputs.cache-hit == 'true'
+      run: |
+        docker load -i ${{ env.DOCKER_CACHE_PATH }}/react.tar
+        docker load -i ${{ env.DOCKER_CACHE_PATH }}/emulator.tar
     - name: change owner
       run: sudo chown -R 1000:1000 ./ 
+    - name: Docker Build
+      run: |
+        docker compose build
+        docker save -o ${{ env.DOCKER_CACHE_PATH }}/react.tar ${{ env.REPOSITORY_NAME }}-react
+        docker save -o ${{ env.DOCKER_CACHE_PATH }}/emulator.tar ${{ env.REPOSITORY_NAME }}-emulator
     - name: run test on docker-compose
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
@@ -24,7 +44,6 @@ jobs:
         MESSAGING_SENDER_ID: "${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}"
         APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
       run: |
-        docker compose build
         docker compose run --rm react yarn install
         docker compose run --rm react yarn lint
         docker compose up -d emulator
