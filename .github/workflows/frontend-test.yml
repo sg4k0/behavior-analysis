@@ -26,6 +26,9 @@ jobs:
       run: |
         docker load -i ${{ env.DOCKER_CACHE_PATH }}/react.tar
         docker load -i ${{ env.DOCKER_CACHE_PATH }}/emulator.tar
+    - name: Cache Make Directory
+      if: steps.cache-docker-image.outputs.cache-hit != 'true'
+      run: mkdir -p ${{ env.DOCKER_CACHE_PATH }}
     - name: change owner
       run: sudo chown -R 1000:1000 ./ 
     - name: Docker Build
