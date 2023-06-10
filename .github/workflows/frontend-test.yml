@@ -40,16 +40,16 @@ jobs:
         cache-to: type=gha,mode=max,scope=emulator
     - name: change owner
       run: sudo chown -R 1000:1000 ./
-    - name: docker volume create
-      run: |
-        docker volume create behavior-analysis_node_modules
-        sudo chown -R 1000:1000 /var/lib/docker/volumes/behavior-analysis_node_modules
     - name: Cache node_modules
       uses: actions/cache@v2
       with:
-        path: /var/lib/docker/volumes/behavior-analysis_node_modules
+        path: ./tmp/node_modules
         key: behavior-analysis_node_modules
         restore-keys: behavior-analysis_node_modules
+    - name: docker volume create
+      run: |
+        docker volume create behavior-analysis_node_modules
+        sudo cp ./tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: run test on docker-compose
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
@@ -62,10 +62,7 @@ jobs:
         APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
       run: |
         docker compose run --rm react yarn install
-        docker compose run --rm react yarn lint
-        docker compose up -d emulator
-        sleep 10
-        docker compose run --rm react yarn test
+        sudo cp /var/lib/docker/volumes/behavior-analysis_node_modules/_data/* ./tmp/node_modules/
       working-directory: ./
   lint:
     name: Lint
@@ -91,16 +88,16 @@ jobs:
         cache-to: type=gha,mode=max,scope=react
     - name: change owner
       run: sudo chown -R 1000:1000 ./
-    - name: docker volume create
-      run: |
-        docker volume create behavior-analysis_node_modules
-        sudo chown -R 1000:1000 /var/lib/docker/volumes/behavior-analysis_node_modules
     - name: Cache node_modules
       uses: actions/cache@v2
       with:
-        path: /var/lib/docker/volumes/behavior-analysis_node_modules
+        path: ./tmp/node_modules
         key: behavior-analysis_node_modules
         restore-keys: behavior-analysis_node_modules
+    - name: docker volume create
+      run: |
+        docker volume create behavior-analysis_node_modules
+        sudo cp ./tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: run lint
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
@@ -150,16 +147,16 @@ jobs:
         cache-to: type=gha,mode=max,scope=emulator
     - name: change owner
       run: sudo chown -R 1000:1000 ./
-    - name: docker volume create
-      run: |
-        docker volume create behavior-analysis_node_modules
-        sudo chown -R 1000:1000 /var/lib/docker/volumes/behavior-analysis_node_modules
     - name: Cache node_modules
       uses: actions/cache@v2
       with:
-        path: /var/lib/docker/volumes/behavior-analysis_node_modules
+        path: ./tmp/node_modules
         key: behavior-analysis_node_modules
         restore-keys: behavior-analysis_node_modules
+    - name: docker volume create
+      run: |
+        docker volume create behavior-analysis_node_modules
+        sudo cp ./tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: run test
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
