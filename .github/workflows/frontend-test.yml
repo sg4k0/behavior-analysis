@@ -24,8 +24,9 @@ jobs:
           NODE_VER=${{ env.NODE_VER }}
           FIREBASE_VER=${{ env.FIREBASE_VER }}
         tags: behavior-analysis-react:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        load: true
+        cache-from: type=gha,scope=react
+        cache-to: type=gha,mode=max,scope=react
     - uses: docker/build-push-action@v4
       with:
         context: ./firebase_emulator
@@ -34,8 +35,9 @@ jobs:
           OPEN_JDK_VER=${{ env.OPEN_JDK_VER }}
           FIREBASE_VER=${{ env.FIREBASE_VER }}
         tags: behavior-analysis-emulator:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        load: true
+        cache-from: type=gha,scope=emulator
+        cache-to: type=gha,mode=max,scope=emulator
     - name: change owner
       run: sudo chown -R 1000:1000 ./ 
     - name: run test on docker-compose
@@ -49,6 +51,7 @@ jobs:
         MESSAGING_SENDER_ID: "${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}"
         APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
       run: |
+        docker images
         docker volume create behavior-analysis_node_modules
         docker compose run --rm react yarn install
         docker compose run --rm react yarn lint
