@@ -39,7 +39,15 @@ jobs:
         cache-from: type=gha,scope=emulator
         cache-to: type=gha,mode=max,scope=emulator
     - name: change owner
-      run: sudo chown -R 1000:1000 ./ 
+      run: sudo chown -R 1000:1000 ./
+    - name: docker volume create
+      run: docker volume create behavior-analysis_node_modules
+    - name: Cache node_modules
+      uses: actions/cache@v2
+      with:
+        path: /var/lib/docker/volumes/behavior-analysis_node_modules
+        key: behavior-analysis_node_modules
+        restore-keys: behavior-analysis_node_modules
     - name: run test on docker-compose
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
@@ -51,11 +59,9 @@ jobs:
         MESSAGING_SENDER_ID: "${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}"
         APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
       run: |
-        docker images
-        docker volume create behavior-analysis_node_modules
         docker compose run --rm react yarn install
         docker compose run --rm react yarn lint
         docker compose up -d emulator
-        sleep 15
+        sleep 10
         docker compose run --rm react yarn test
       working-directory: ./
