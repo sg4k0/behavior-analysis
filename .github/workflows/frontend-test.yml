@@ -49,7 +49,7 @@ jobs:
         restore-keys: behavior-analysis_node_modules
     - name: Cache Directory
       if: steps.behavior-analysis_node_modules.outputs.cache-hit != 'true'
-      run: mkdir -p ./tmp/node_modules
+      run: sudo mkdir -p ./tmp/node_modules
     - name: docker volume create
       run: |
         docker volume create behavior-analysis_node_modules
