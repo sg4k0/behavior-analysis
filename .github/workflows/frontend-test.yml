@@ -3,6 +3,7 @@ on:
   pull_request:
 env:
   NODE_VER: 18.16.0-slim
+  OPEN_JDK_VER: 20-slim
   FIREBASE_VER: 12.3.0
   VOLUME_EXTERNAL: true
 jobs:
@@ -22,6 +23,17 @@ jobs:
         build-args: |
           NODE_VER=${{ env.NODE_VER }}
           FIREBASE_VER=${{ env.FIREBASE_VER }}
+        tags: behavior-analysis-react:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+    - uses: docker/build-push-action@v4
+      with:
+        context: ./firebase_emulator
+        build-args: |
+          NODE_VER=${{ env.NODE_VER }}
+          OPEN_JDK_VER=${{ env.OPEN_JDK_VER }}
+          FIREBASE_VER=${{ env.FIREBASE_VER }}
+        tags: behavior-analysis-emulator:latest
         cache-from: type=gha
         cache-to: type=gha,mode=max
     - name: change owner
