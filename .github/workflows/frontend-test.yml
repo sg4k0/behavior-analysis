@@ -44,16 +44,18 @@ jobs:
       uses: actions/cache@v2
       id: behavior-analysis_node_modules
       with:
-        path: ./tmp/node_modules
+        path: /tmp/node_modules
         key: behavior-analysis_node_modules
         restore-keys: behavior-analysis_node_modules
     - name: Cache Directory
       if: steps.behavior-analysis_node_modules.outputs.cache-hit != 'true'
-      run: sudo mkdir -p ./tmp/node_modules
+      run: |
+        sudo mkdir -p /tmp/node_modules
+        sudo touch /tmp/node_modules/.keep
     - name: docker volume create
       run: |
         docker volume create behavior-analysis_node_modules
-        sudo cp ./tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
+        sudo cp /tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: run test on docker-compose
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
@@ -66,7 +68,7 @@ jobs:
         APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
       run: |
         docker compose run --rm react yarn install
-        sudo cp /var/lib/docker/volumes/behavior-analysis_node_modules/_data/* ./tmp/node_modules/
+        sudo cp /var/lib/docker/volumes/behavior-analysis_node_modules/_data/* /tmp/node_modules/
       working-directory: ./
   lint:
     name: Lint
@@ -95,13 +97,13 @@ jobs:
     - name: Cache node_modules
       uses: actions/cache@v2
       with:
-        path: ./tmp/node_modules
+        path: /tmp/node_modules
         key: behavior-analysis_node_modules
         restore-keys: behavior-analysis_node_modules
     - name: docker volume create
       run: |
         docker volume create behavior-analysis_node_modules
-        sudo cp ./tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
+        sudo cp /tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: run lint
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
@@ -154,13 +156,13 @@ jobs:
     - name: Cache node_modules
       uses: actions/cache@v2
       with:
-        path: ./tmp/node_modules
+        path: /tmp/node_modules
         key: behavior-analysis_node_modules
         restore-keys: behavior-analysis_node_modules
     - name: docker volume create
       run: |
         docker volume create behavior-analysis_node_modules
-        sudo cp ./tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
+        sudo cp /tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: run test
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
