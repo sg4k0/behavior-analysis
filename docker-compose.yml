@@ -41,3 +41,5 @@ services:
 
 volumes:
   node_modules:
+    name: behavior-analysis_node_modules
+    external: true
