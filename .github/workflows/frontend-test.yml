@@ -42,10 +42,14 @@ jobs:
       run: sudo chown -R 1000:1000 ./
     - name: Cache node_modules
       uses: actions/cache@v2
+      id: behavior-analysis_node_modules
       with:
         path: ./tmp/node_modules
         key: behavior-analysis_node_modules
         restore-keys: behavior-analysis_node_modules
+    - name: Cache Directory
+      if: steps.behavior-analysis_node_modules.outputs.cache-hit != 'true'
+      run: mkdir ./tmp/node_modules
     - name: docker volume create
       run: |
         docker volume create behavior-analysis_node_modules
