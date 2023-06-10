@@ -51,5 +51,6 @@ jobs:
         docker compose run --rm react yarn lint
         docker compose up -d emulator
         sleep 15
+        docker volume ls
         docker compose run --rm react yarn test
       working-directory: ./
