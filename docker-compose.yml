@@ -1,6 +1,7 @@
 version: '3.9'
 services:
   react:
+    image: behavior-analysis-emulator:latest
     build:
       args:
         - NODE_VER=18.16.0-slim
@@ -23,8 +24,8 @@ services:
     ports:
       - 5173:5173
       - 6006:6006
-
   emulator:
+    image: behavior-analysis-react:latest 
     build:
       args:
         - OPEN_JDK_VER=20-slim
@@ -42,4 +43,4 @@ services:
 volumes:
   node_modules:
     name: behavior-analysis_node_modules
-    external: true
+    external: ${VOLUME_EXTERNAL:-false}
