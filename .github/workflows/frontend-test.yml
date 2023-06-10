@@ -41,7 +41,9 @@ jobs:
     - name: change owner
       run: sudo chown -R 1000:1000 ./
     - name: docker volume create
-      run: docker volume create behavior-analysis_node_modules
+      run: |
+        docker volume create behavior-analysis_node_modules
+        sudo chown -R 1000:1000 /var/lib/docker/volumes/behavior-analysis_node_modules
     - name: Cache node_modules
       uses: actions/cache@v2
       with:
