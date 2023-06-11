@@ -70,6 +70,7 @@ jobs:
         APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
       run: |
         docker compose run --rm react yarn install
+        sudo ls -la /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
         sudo cp -pRf /var/lib/docker/volumes/behavior-analysis_node_modules/_data/* /tmp/node_modules
       working-directory: ./
   lint:
