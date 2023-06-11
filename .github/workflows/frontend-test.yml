@@ -21,7 +21,6 @@ jobs:
     - name: Yarn Lock File Commit Hash
       id: yarn-lock-file-commit-hash
       run: |
-        git log -n 10 --oneline
         COMMIT_HASH="$(git log -n 1 --pretty=%H --date-order -- frontend/yarn.lock)"
         echo "COMMIT_HASH=${COMMIT_HASH}" >> $GITHUB_ENV
         echo "commit-hash=$COMMIT_HASH" >> GITHUB_OUTPUT
