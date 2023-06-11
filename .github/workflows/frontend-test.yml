@@ -119,6 +119,7 @@ jobs:
         MESSAGING_SENDER_ID: "${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}"
         APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
       run: |
+        docker compose run --rm react ls -la node_modules
         docker compose run --rm react yarn lint
       working-directory: ./
   test:
