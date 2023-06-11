@@ -71,6 +71,7 @@ jobs:
       run: |
         docker compose run --rm react yarn install
         sudo cp -rf /var/lib/docker/volumes/behavior-analysis_node_modules/_data/. /tmp/node_modules
+        sudo ls -la /tmp/node_modules
       working-directory: ./
   lint:
     name: Lint
