@@ -60,7 +60,6 @@ jobs:
     - name: docker volume create
       run: |
         docker volume create behavior-analysis_node_modules
-        sudo ls -la /tmp/node_modules
         sudo cp -r /tmp/node_modules/. /var/lib/docker/volumes/behavior-analysis_node_modules/_data
     - name: change owner
       run: |
@@ -80,7 +79,6 @@ jobs:
         docker compose run --rm react ls -la node_modules
         docker compose run --rm react yarn install
         sudo cp -rf /var/lib/docker/volumes/behavior-analysis_node_modules/_data/. /tmp/node_modules
-        sudo ls -la /tmp/node_modules
       working-directory: ./
   # lint:
   #   name: Lint
