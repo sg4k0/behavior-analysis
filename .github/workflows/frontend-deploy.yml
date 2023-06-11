@@ -14,9 +14,14 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: checkout pushed commit
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Yarn Lock File Commit Hash
+        id: yarn-lock-file-commit-hash
+        run: |
+          COMMIT_HASH="$(git log -n 1 --pretty=%H --date-order -- frontend/yarn.lock)"
+          echo "COMMIT_HASH=${COMMIT_HASH}" >> $GITHUB_ENV
       - uses: docker/setup-buildx-action@v2
       - uses: docker/build-push-action@v4
         with:
@@ -28,6 +33,25 @@ jobs:
           load: true
           cache-from: type=gha,scope=react
           cache-to: type=gha,mode=max,scope=react
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: behavior-analysis_node_modules
+        with:
+          path: /tmp/node_modules/
+          key: behavior-analysis_node_modules-${{env.COMMIT_HASH}}
+      - name: Cache Directory
+        if: steps.behavior-analysis_node_modules.outputs.cache-hit != 'true'
+        run: |
+          sudo mkdir -p /tmp/node_modules
+          sudo touch /tmp/node_modules/.keep
+      - name: docker volume create
+        run: |
+          docker volume create behavior-analysis_node_modules
+          sudo cp -r /tmp/node_modules/. /var/lib/docker/volumes/behavior-analysis_node_modules/_data
+      - name: change owner
+        run: |
+          sudo chown -R 1000:1000 ./
+          sudo chown -R 1000:1000 /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
       - name: change owner
         run: sudo chown -R 1000:1000 ./
       - name: docker volume create
