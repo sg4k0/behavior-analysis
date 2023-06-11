@@ -53,7 +53,7 @@ jobs:
     - name: docker volume create
       run: |
         docker volume create behavior-analysis_node_modules
-        sudo cp -pR /tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data
+        sudo cp -r /tmp/node_modules/. /var/lib/docker/volumes/behavior-analysis_node_modules/_data
     - name: change owner
       run: |
         sudo chown -R 1000:1000 ./
@@ -70,8 +70,7 @@ jobs:
         APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
       run: |
         docker compose run --rm react yarn install
-        sudo ls -la /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
-        sudo cp -pRf /var/lib/docker/volumes/behavior-analysis_node_modules/_data/* /tmp/node_modules
+        sudo cp -rf /var/lib/docker/volumes/behavior-analysis_node_modules/_data/. /tmp/node_modules
       working-directory: ./
   lint:
     name: Lint
@@ -104,7 +103,7 @@ jobs:
     - name: docker volume create
       run: |
         docker volume create behavior-analysis_node_modules
-        sudo cp -pR /tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data
+        sudo cp -r /tmp/node_modules/. /var/lib/docker/volumes/behavior-analysis_node_modules/_data
     - name: change owner
       run: |
         sudo chown -R 1000:1000 ./
