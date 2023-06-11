@@ -38,8 +38,6 @@ jobs:
         load: true
         cache-from: type=gha,scope=emulator
         cache-to: type=gha,mode=max,scope=emulator
-    - name: change owner
-      run: sudo chown -R 1000:1000 ./
     - name: Cache node_modules
       uses: actions/cache@v2
       id: behavior-analysis_node_modules
@@ -56,6 +54,10 @@ jobs:
       run: |
         docker volume create behavior-analysis_node_modules
         sudo cp -r /tmp/node_modules/ /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
+    - name: change owner
+      run: |
+        sudo chown -R 1000:1000 ./
+        sudo chown -R 1000:1000 /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: run test on docker-compose
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
@@ -68,7 +70,7 @@ jobs:
         APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
       run: |
         docker compose run --rm react yarn install
-        sudo cp -r /var/lib/docker/volumes/behavior-analysis_node_modules/_data/ /tmp/node_modules/
+        sudo cp -rf /var/lib/docker/volumes/behavior-analysis_node_modules/_data/ /tmp/node_modules/
       working-directory: ./
   lint:
     name: Lint
@@ -92,8 +94,6 @@ jobs:
         load: true
         cache-from: type=gha,scope=react
         cache-to: type=gha,mode=max,scope=react
-    - name: change owner
-      run: sudo chown -R 1000:1000 ./
     - name: Cache node_modules
       uses: actions/cache@v2
       with:
@@ -104,6 +104,10 @@ jobs:
       run: |
         docker volume create behavior-analysis_node_modules
         sudo cp -r /tmp/node_modules/ /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
+    - name: change owner
+      run: |
+        sudo chown -R 1000:1000 ./
+        sudo chown -R 1000:1000 /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: run lint
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
@@ -151,8 +155,6 @@ jobs:
         load: true
         cache-from: type=gha,scope=emulator
         cache-to: type=gha,mode=max,scope=emulator
-    - name: change owner
-      run: sudo chown -R 1000:1000 ./
     - name: Cache node_modules
       uses: actions/cache@v2
       with:
@@ -163,6 +165,10 @@ jobs:
       run: |
         docker volume create behavior-analysis_node_modules
         sudo cp -r /tmp/node_modules/ /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
+    - name: change owner
+      run: |
+        sudo chown -R 1000:1000 ./
+        sudo chown -R 1000:1000 /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: run test
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
