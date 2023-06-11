@@ -10,12 +10,20 @@ jobs:
   setup:
     name: Setup
     runs-on: ubuntu-latest
+    outputs:
+      updated: ${{ steps.yarn-lock-file-updated-at.outputs.updated }}
     timeout-minutes: 10
     steps:
     - name: checkout pushed commit
       uses: actions/checkout@v2
       with:
         ref: ${{ github.event.pull_request.head.sha }}
+    - name: Yarn Lock File Updated_at
+      id: yarn-lock-file-updated-at
+      run: |
+        UPDATED_AT="$(date "+%Y%m%d-%H%M%S" -r yarn.lock)"
+        echo "UPDATED_AT=${UPDATED_AT}" >> $GITHUB_ENV
+        echo "::set-output name=updated::$UPDATED_AT"
     - uses: docker/setup-buildx-action@v2
     - uses: docker/build-push-action@v4
       with:
@@ -43,7 +51,7 @@ jobs:
       id: behavior-analysis_node_modules
       with:
         path: /tmp/node_modules/
-        key: behavior-analysis_node_modules
+        key: behavior-analysis_node_modules-${{env.UPDATED_AT}}
         restore-keys: behavior-analysis_node_modules
     - name: Cache Directory
       if: steps.behavior-analysis_node_modules.outputs.cache-hit != 'true'
