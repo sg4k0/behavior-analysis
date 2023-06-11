@@ -54,6 +54,8 @@ jobs:
       run: |
         docker volume create behavior-analysis_node_modules
         sudo cp -r /tmp/node_modules/ /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
+        sudo ls -la /tmp/node_modules/
+        sudo ls -la /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: change owner
       run: |
         sudo chown -R 1000:1000 ./
