@@ -52,7 +52,6 @@ jobs:
       with:
         path: /tmp/node_modules/
         key: behavior-analysis_node_modules-${{env.UPDATED_AT}}
-        restore-keys: behavior-analysis_node_modules
     - name: Cache Directory
       if: steps.behavior-analysis_node_modules.outputs.cache-hit != 'true'
       run: |
