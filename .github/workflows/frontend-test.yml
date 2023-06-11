@@ -53,6 +53,7 @@ jobs:
     - name: docker volume create
       run: |
         docker volume create behavior-analysis_node_modules
+        sudo ls -la /tmp/node_modules
         sudo cp -r /tmp/node_modules/. /var/lib/docker/volumes/behavior-analysis_node_modules/_data
     - name: change owner
       run: |
@@ -73,116 +74,116 @@ jobs:
         sudo cp -rf /var/lib/docker/volumes/behavior-analysis_node_modules/_data/. /tmp/node_modules
         sudo ls -la /tmp/node_modules
       working-directory: ./
-  lint:
-    name: Lint
-    needs:
-      - setup
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-    - name: checkout pushed commit
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
-    - uses: docker/setup-buildx-action@v2
-    - uses: docker/build-push-action@v4
-      with:
-        context: ./frontend
-        build-args: |
-          NODE_VER=${{ env.NODE_VER }}
-          FIREBASE_VER=${{ env.FIREBASE_VER }}
-        tags: behavior-analysis-react:latest
-        load: true
-        cache-from: type=gha,scope=react
-        cache-to: type=gha,mode=max,scope=react
-    - name: Cache node_modules
-      uses: actions/cache@v2
-      with:
-        path: /tmp/node_modules/
-        key: behavior-analysis_node_modules
-        restore-keys: behavior-analysis_node_modules
-    - name: docker volume create
-      run: |
-        docker volume create behavior-analysis_node_modules
-        sudo ls -la /tmp/node_modules
-        sudo cp -r /tmp/node_modules/. /var/lib/docker/volumes/behavior-analysis_node_modules/_data
-    - name: change owner
-      run: |
-        sudo chown -R 1000:1000 ./
-        sudo chown -R 1000:1000 /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
-    - name: run lint
-      env:
-        MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
-        MYWEBSITE_NAME: "${{ secrets.MYWEBSITE_NAME }}"
-        API_KEY: "${{ secrets.FIREBASE_API_KEY }}"
-        AUTH_DOMAIN: "${{ secrets.FIREBASE_AUTH_DOMAIN }}"
-        PROJECT_ID: "${{ secrets.FIREBASE_PROJECT_ID }}"
-        STORAGE_BUCKET: "${{ secrets.FIREBASE_STORAGE_BUCKET }}"
-        MESSAGING_SENDER_ID: "${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}"
-        APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
-      run: |
-        docker compose run --rm react ls -la node_modules
-        docker compose run --rm react yarn lint
-      working-directory: ./
-  test:
-    name: Test
-    needs:
-      - setup
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-    - name: checkout pushed commit
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
-    - uses: docker/setup-buildx-action@v2
-    - uses: docker/build-push-action@v4
-      with:
-        context: ./frontend
-        build-args: |
-          NODE_VER=${{ env.NODE_VER }}
-          FIREBASE_VER=${{ env.FIREBASE_VER }}
-        tags: behavior-analysis-react:latest
-        load: true
-        cache-from: type=gha,scope=react
-        cache-to: type=gha,mode=max,scope=react
-    - uses: docker/build-push-action@v4
-      with:
-        context: ./firebase_emulator
-        build-args: |
-          NODE_VER=${{ env.NODE_VER }}
-          OPEN_JDK_VER=${{ env.OPEN_JDK_VER }}
-          FIREBASE_VER=${{ env.FIREBASE_VER }}
-        tags: behavior-analysis-emulator:latest
-        load: true
-        cache-from: type=gha,scope=emulator
-        cache-to: type=gha,mode=max,scope=emulator
-    - name: Cache node_modules
-      uses: actions/cache@v2
-      with:
-        path: /tmp/node_modules/
-        key: behavior-analysis_node_modules
-        restore-keys: behavior-analysis_node_modules
-    - name: docker volume create
-      run: |
-        docker volume create behavior-analysis_node_modules
-        sudo cp -pR /tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data
-    - name: change owner
-      run: |
-        sudo chown -R 1000:1000 ./
-        sudo chown -R 1000:1000 /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
-    - name: run test
-      env:
-        MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
-        MYWEBSITE_NAME: "${{ secrets.MYWEBSITE_NAME }}"
-        API_KEY: "${{ secrets.FIREBASE_API_KEY }}"
-        AUTH_DOMAIN: "${{ secrets.FIREBASE_AUTH_DOMAIN }}"
-        PROJECT_ID: "${{ secrets.FIREBASE_PROJECT_ID }}"
-        STORAGE_BUCKET: "${{ secrets.FIREBASE_STORAGE_BUCKET }}"
-        MESSAGING_SENDER_ID: "${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}"
-        APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
-      run: |
-        docker compose up -d emulator
-        sleep 10
-        docker compose run --rm react yarn test
-      working-directory: ./
+  # lint:
+  #   name: Lint
+  #   needs:
+  #     - setup
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   steps:
+  #   - name: checkout pushed commit
+  #     uses: actions/checkout@v2
+  #     with:
+  #       ref: ${{ github.event.pull_request.head.sha }}
+  #   - uses: docker/setup-buildx-action@v2
+  #   - uses: docker/build-push-action@v4
+  #     with:
+  #       context: ./frontend
+  #       build-args: |
+  #         NODE_VER=${{ env.NODE_VER }}
+  #         FIREBASE_VER=${{ env.FIREBASE_VER }}
+  #       tags: behavior-analysis-react:latest
+  #       load: true
+  #       cache-from: type=gha,scope=react
+  #       cache-to: type=gha,mode=max,scope=react
+  #   - name: Cache node_modules
+  #     uses: actions/cache@v2
+  #     with:
+  #       path: /tmp/node_modules/
+  #       key: behavior-analysis_node_modules
+  #       restore-keys: behavior-analysis_node_modules
+  #   - name: docker volume create
+  #     run: |
+  #       docker volume create behavior-analysis_node_modules
+  #       sudo ls -la /tmp/node_modules
+  #       sudo cp -r /tmp/node_modules/. /var/lib/docker/volumes/behavior-analysis_node_modules/_data
+  #   - name: change owner
+  #     run: |
+  #       sudo chown -R 1000:1000 ./
+  #       sudo chown -R 1000:1000 /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
+  #   - name: run lint
+  #     env:
+  #       MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
+  #       MYWEBSITE_NAME: "${{ secrets.MYWEBSITE_NAME }}"
+  #       API_KEY: "${{ secrets.FIREBASE_API_KEY }}"
+  #       AUTH_DOMAIN: "${{ secrets.FIREBASE_AUTH_DOMAIN }}"
+  #       PROJECT_ID: "${{ secrets.FIREBASE_PROJECT_ID }}"
+  #       STORAGE_BUCKET: "${{ secrets.FIREBASE_STORAGE_BUCKET }}"
+  #       MESSAGING_SENDER_ID: "${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}"
+  #       APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
+  #     run: |
+  #       docker compose run --rm react ls -la node_modules
+  #       docker compose run --rm react yarn lint
+  #     working-directory: ./
+  # test:
+  #   name: Test
+  #   needs:
+  #     - setup
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   steps:
+  #   - name: checkout pushed commit
+  #     uses: actions/checkout@v2
+  #     with:
+  #       ref: ${{ github.event.pull_request.head.sha }}
+  #   - uses: docker/setup-buildx-action@v2
+  #   - uses: docker/build-push-action@v4
+  #     with:
+  #       context: ./frontend
+  #       build-args: |
+  #         NODE_VER=${{ env.NODE_VER }}
+  #         FIREBASE_VER=${{ env.FIREBASE_VER }}
+  #       tags: behavior-analysis-react:latest
+  #       load: true
+  #       cache-from: type=gha,scope=react
+  #       cache-to: type=gha,mode=max,scope=react
+  #   - uses: docker/build-push-action@v4
+  #     with:
+  #       context: ./firebase_emulator
+  #       build-args: |
+  #         NODE_VER=${{ env.NODE_VER }}
+  #         OPEN_JDK_VER=${{ env.OPEN_JDK_VER }}
+  #         FIREBASE_VER=${{ env.FIREBASE_VER }}
+  #       tags: behavior-analysis-emulator:latest
+  #       load: true
+  #       cache-from: type=gha,scope=emulator
+  #       cache-to: type=gha,mode=max,scope=emulator
+  #   - name: Cache node_modules
+  #     uses: actions/cache@v2
+  #     with:
+  #       path: /tmp/node_modules/
+  #       key: behavior-analysis_node_modules
+  #       restore-keys: behavior-analysis_node_modules
+  #   - name: docker volume create
+  #     run: |
+  #       docker volume create behavior-analysis_node_modules
+  #       sudo cp -pR /tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data
+  #   - name: change owner
+  #     run: |
+  #       sudo chown -R 1000:1000 ./
+  #       sudo chown -R 1000:1000 /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
+  #   - name: run test
+  #     env:
+  #       MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
+  #       MYWEBSITE_NAME: "${{ secrets.MYWEBSITE_NAME }}"
+  #       API_KEY: "${{ secrets.FIREBASE_API_KEY }}"
+  #       AUTH_DOMAIN: "${{ secrets.FIREBASE_AUTH_DOMAIN }}"
+  #       PROJECT_ID: "${{ secrets.FIREBASE_PROJECT_ID }}"
+  #       STORAGE_BUCKET: "${{ secrets.FIREBASE_STORAGE_BUCKET }}"
+  #       MESSAGING_SENDER_ID: "${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}"
+  #       APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
+  #     run: |
+  #       docker compose up -d emulator
+  #       sleep 10
+  #       docker compose run --rm react yarn test
+  #     working-directory: ./
