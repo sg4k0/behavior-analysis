@@ -55,8 +55,8 @@ jobs:
     - name: docker volume create
       run: |
         docker volume create behavior-analysis_node_modules
-        ls -la /tmp/
-        ls -la /var/lib/docker/volumes/behavior-analysis_node_modules/
+        ls -la /tmp/node_modules/
+        sudo ls -la /var/lib/docker/volumes/behavior-analysis_node_modules/
         sudo cp /tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: run test on docker-compose
       env:
