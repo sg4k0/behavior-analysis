@@ -55,9 +55,7 @@ jobs:
     - name: docker volume create
       run: |
         docker volume create behavior-analysis_node_modules
-        ls -la /tmp/node_modules/
-        sudo ls -la /var/lib/docker/volumes/behavior-analysis_node_modules/
-        sudo cp /tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
+        sudo cp -r /tmp/node_modules/ /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: run test on docker-compose
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
@@ -70,7 +68,7 @@ jobs:
         APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
       run: |
         docker compose run --rm react yarn install
-        sudo cp /var/lib/docker/volumes/behavior-analysis_node_modules/_data/* /tmp/node_modules/
+        sudo cp -r /var/lib/docker/volumes/behavior-analysis_node_modules/_data/ /tmp/node_modules/
       working-directory: ./
   lint:
     name: Lint
@@ -105,7 +103,7 @@ jobs:
     - name: docker volume create
       run: |
         docker volume create behavior-analysis_node_modules
-        sudo cp /tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
+        sudo cp -r /tmp/node_modules/ /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: run lint
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
@@ -164,7 +162,7 @@ jobs:
     - name: docker volume create
       run: |
         docker volume create behavior-analysis_node_modules
-        sudo cp /tmp/node_modules/* /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
+        sudo cp -r /tmp/node_modules/ /var/lib/docker/volumes/behavior-analysis_node_modules/_data/
     - name: run test
       env:
         MYWEBSITE_URL: "${{ secrets.MYWEBSITE_URL }}"
