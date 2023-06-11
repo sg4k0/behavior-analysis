@@ -17,7 +17,7 @@ jobs:
     - name: checkout pushed commit
       uses: actions/checkout@v2
       with:
-        ref: ${{ github.event.pull_request.head.sha }}
+        fetch-depth: 0
     - name: Yarn Lock File Commit Hash
       id: yarn-lock-file-commit-hash
       run: |
