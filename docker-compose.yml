@@ -4,8 +4,8 @@ services:
     image: behavior-analysis-react:latest
     build:
       args:
-        - NODE_VER=18.16.0-slim
-        - FIREBASE_VER=12.3.0
+        - NODE_VER=20.10.0-slim
+        - FIREBASE_VER=13.0.2
       context: ./frontend
     tty: true
     environment:
@@ -29,8 +29,8 @@ services:
     build:
       args:
         - OPEN_JDK_VER=20-slim
-        - NODE_VER=18.16.0-slim
-        - FIREBASE_VER=12.3.0
+        - NODE_VER=20.10.0-slim
+        - FIREBASE_VER=13.0.2
       context: ./firebase_emulator
     tty: true
     environment:
