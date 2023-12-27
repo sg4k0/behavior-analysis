@@ -21,9 +21,9 @@ export const AuthFailed: ComponentStoryObj<typeof Login> = {
     const canvas = within(canvasElement)
     const emailField = canvas.getByRole('textbox', { name: 'メールアドレス' })
     const passwordField = canvas.getByLabelText(/パスワード/i)
-    userEvent.type(emailField, 'test1@example.com')
-    userEvent.type(passwordField, 'password')
-    userEvent.click(canvas.getByRole('button'))
+    await userEvent.type(emailField, 'test1@example.com')
+    await userEvent.type(passwordField, 'password')
+    await userEvent.click(canvas.getByRole('button'))
   }
 }
 
@@ -32,8 +32,8 @@ export const AuthSuccess: ComponentStoryObj<typeof Login> = {
     const canvas = within(canvasElement)
     const emailField = canvas.getByRole('textbox', { name: 'メールアドレス' })
     const passwordField = canvas.getByLabelText(/パスワード/i)
-    userEvent.type(emailField, 'test@example.com')
-    userEvent.type(passwordField, 'password')
-    userEvent.click(canvas.getByRole('button'))
+    await userEvent.type(emailField, 'test@example.com')
+    await userEvent.type(passwordField, 'password')
+    await userEvent.click(canvas.getByRole('button'))
   }
 }
